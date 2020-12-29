@@ -40,7 +40,7 @@ function get_player_data()
 
     for k, v in pairs (party) do
         if (type(v) == "table") then
-            if (not v.is_npc) then
+            if (v.mob and not v.is_npc) then
                 id = v.mob.id
                 current_members[id] = {}
                 current_members[id].name = v.mob.name
@@ -168,11 +168,10 @@ function show_report()
     report = report.. " - Leader: "..tostring(event.leader or 'None').."\n"
 
     local current_members = get_player_data()
-    windower.add_to_chat(17, T(current_members):tovstring())
     for k,v in pairs(current_members) do
         local role = "Role: Unknown"
         report = report..v.name
-        if (v.main_job ~= "NON") then
+        if (v.main_job and v.main_job ~= "NON") then
             report = report.." ("..v.main_job..v.main_job_lvl.."/"..v.sub_job..v.sub_job_lvl..")"
         end
 
