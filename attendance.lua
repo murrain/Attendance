@@ -176,7 +176,7 @@ function show_report()
     local report = "Event: "
 
     report = report.. title_case(event.name or 'Unknown')
-    report = report.. title_case(event.type and ("["..event.type.."]") or '')
+    report = report.. title_case(event.type and (" ["..event.type.."]") or '')
     report = report.. " - Leader: "..tostring(event.leader or 'None').."\n"
 
     local current_members = get_player_data()
