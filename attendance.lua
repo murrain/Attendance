@@ -15,7 +15,7 @@ local is_ready = false
 local known_players = T{}
 local event = T{}
 local event_names = T{"Dyna - D","Dyna - D - Push","Omen","Vagary","Delve","Social",}
-local event_types = T{"Farm","Wave 1 Boss","Wave 2 Boss","Wave 3 Boss","Fu","Gin","Kei","Kin","Kyou","Ou","Mid-Boss",}
+local event_types = T{"Farm","Wave 1 Boss","Wave 2 Boss","Wave 3 Boss","W3 Group","Fu","Gin","Kei","Kin","Kyou","Ou","Mid-Boss",}
 local ignore_members = T{}
 local show_debug_once = false
 
