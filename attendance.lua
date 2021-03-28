@@ -180,6 +180,7 @@ function show_report()
     report = report.. " - Leader: "..tostring(event.leader or 'None').."\n"
 
     local current_members = get_player_data()
+    local lines = 0
     for k,v in pairs(current_members) do
         if (not ignore_members:contains(v.name)) then
             local role = "Role: Unknown"
@@ -199,13 +200,14 @@ function show_report()
             elseif (T{"BLM","SMN"}:contains(v.main_job)) then
                 role = 'Role: Magical DD'
             end
-            report = report.." "..role
-            report = report.."\n"
+            report = report.." "..role.."\n"
         end
     end
 
     for k,v in pairs(report:split("\n")) do
-        windower.add_to_chat(17, v)
+        if (v ~= nil and type(v) ~= "number" and #v>1) then
+            windower.add_to_chat(17, v)
+        end
     end
 end
 
