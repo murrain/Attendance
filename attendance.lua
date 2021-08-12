@@ -39,7 +39,7 @@ function title_case(str)
 end
 
 function ready()
-    windower.add_to_chat(17, "Attendance reports should be available now.")
+    windower.add_to_chat(207, "Attendance reports should be available now.")
     is_ready = true
 end
 
@@ -67,7 +67,7 @@ end
 
 function save_report_xml()
     if (not is_ready) then
-        windower.add_to_chat(17, "Just a little longer please.")
+        windower.add_to_chat(207, "Just a little longer please.")
         return
     end
     local date = os.date('*t')
@@ -122,13 +122,13 @@ function save_report_xml()
     data.event.timestamp = tostring(timestamp)
     report = data:to_xml()
     file:append(report)
-    windower.add_to_chat(17, "Attendance saved as: "..filename)
+    windower.add_to_chat(207, "Attendance saved as: "..filename)
 
 end
 
 function save_report_csv() 
     if (not is_ready) then
-        windower.add_to_chat(17, "Just a little longer please.")
+        windower.add_to_chat(207, "Just a little longer please.")
         return
     end
     local current_members = get_player_data()
@@ -164,12 +164,12 @@ function save_report_csv()
     end
     file:append(report)
 
-    windower.add_to_chat(17, "Attendance saved as: "..filename)
+    windower.add_to_chat(207, "Attendance saved as: "..filename)
 end
 
 function show_report() 
     if (not is_ready) then
-        windower.add_to_chat(17, "Just a little longer please.")
+        windower.add_to_chat(207, "Just a little longer please.")
         return
     end
     local role = "Role: Unknown"
@@ -206,13 +206,13 @@ function show_report()
 
     for k,v in pairs(report:split("\n")) do
         if (v ~= nil and type(v) ~= "number" and #v>1) then
-            windower.add_to_chat(17, v)
+            windower.add_to_chat(207, v)
         end
     end
 end
 
 windower.register_event('load', function()
-    windower.add_to_chat(17, "Please wait 3 second before attempting to process reports to ensure alliance is fully loaded.")
+    windower.add_to_chat(207, "Please wait 3 second before attempting to process reports to ensure alliance is fully loaded.")
     coroutine.schedule(ready, 3)
 end)
 
@@ -220,7 +220,7 @@ windower.register_event('incoming chunk',function(id,data)
     if (id == 0x0DD or id == 0x0DF) then 
         local p = packets.parse('incoming',data)
         if (show_debug_once) then
-            windower.add_to_chat(17, "Packet: \n"..T(p):tovstring())
+            windower.add_to_chat(207, "Packet: \n"..T(p):tovstring())
             show_debug_once = false
         end
         if (p.ID and p['Main job']) then
@@ -253,31 +253,31 @@ windower.register_event('addon command', function(...)
         local n = title_case(args:concat(" "))
         if (event_names:contains(n)) then
             event.name = n
-            windower.add_to_chat(17, "Event name set to "..n)
+            windower.add_to_chat(207, "Event name set to "..n)
         else
-            windower.add_to_chat(17, n.." is not a valid event name.")
+            windower.add_to_chat(207, n.." is not a valid event name.")
         end
         return
     elseif (T{"type","evtype"}:contains(cmd)) then
         local n = title_case(args:concat(" "))
         if (event_types:contains(n)) then
             event.type = n
-            windower.add_to_chat(17, "Event type set to "..n)
+            windower.add_to_chat(207, "Event type set to "..n)
         else
-            windower.add_to_chat(17, n.." is not a valid event type.")
+            windower.add_to_chat(207, n.." is not a valid event type.")
         end
         return
     elseif (T{"leader","lead","ldr"}:contains(cmd)) then
         event.leader = title_case(args:concat(" "))
-        windower.add_to_chat(17, "Event leader set to "..event.leader)
+        windower.add_to_chat(207, "Event leader set to "..event.leader)
         return
     elseif(T{"ignore","ign","ig"}:contains(cmd)) then
         local member = title_case(args:concat(" "))
         ignore_members:append(member)
-        windower.add_to_chat(17, member.." will be ignored in reports")
+        windower.add_to_chat(207, member.." will be ignored in reports")
     elseif (cmd == "once") then
         show_debug_once = True
-        windower.add_to_chat(17, "Showing a packet cycle.")
+        windower.add_to_chat(207, "Showing a packet cycle.")
         return
     end
 end)
