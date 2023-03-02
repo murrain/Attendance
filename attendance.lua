@@ -62,12 +62,13 @@ function get_player_data()
     end
     return current_members
 end
-function save_report_csv() 
+
+function show_report(csv) 
+    local csv = csv or false
     if (not is_ready) then
         windower.add_to_chat(207, "Just a little longer please.")
         return
     end
-    local current_members = get_player_data()
     local date = os.date('*t')
     local time = os.date('%H%M%S')
     local time_c = os.date('%H:%M:%S')
@@ -75,50 +76,32 @@ function save_report_csv()
     local timestamp = ('%.4u.%.2u.%.2u.%.2u'):format(date.year, date.month, date.day, time)
     local report = ""
 
-    local filename = 'attendance'..('_%.4u.%.2u.%.2u_%.2u.csv'):format(date.year, date.month, date.day, time)
-
-    local file = files.new('/export/'..filename)
-    if not file:exists() then
-        file:create()
-    end
-    --name,job/subjob,date,time,timezone,zonename
-    for k,v in pairs(current_members) do
-        if (not ignore_members:contains(v.name)) then
-            report = report..v.name
-            report = report .. "," .. (v.main_job or "---") .. (v.main_job_lvl or "") .. "/" .. (v.sub_job or "---") .. (v.sub_job_lvl or "")
-            report = report..","..('%.4u-%.2u-%.2u'):format(date.year, date.month, date.day)
-            report = report..","..time_c..",UTC"..os.date("%z")
-            report = report .. "," .. v.zone
-            report = report.."\n"
+    if (csv) then
+        filename = 'attendance'..('_%.4u.%.2u.%.2u_%.2u.csv'):format(date.year, date.month, date.day, time)
+        file = files.new('/export/'..filename)
+        if not file:exists() then
+            file:create()
         end
-        windower.add_to_chat(211,report)
     end
-    file:append(report)
-
-    windower.add_to_chat(207, "Attendance saved as: "..filename)
-end
-
-function show_report() 
-    if (not is_ready) then
-        windower.add_to_chat(207, "Just a little longer please.")
-        return
-    end
-    local role = "Role: Unknown"
-    local report = ""
 
     local current_members = get_player_data()
     local lines = 0
     for k,v in pairs(current_members) do
-        windower.add_to_chat(207, current_members[k].name)
-        for key,value in pairs(v) do
-            windower.add_to_chat(211, key..":"..value)
+        if (not ignore_members:contains(v.name)) then
+            local line = ""
+            line = line..v.name
+            line = line .. "," .. (v.main_job or "---") .. (v.main_job_lvl or "") .. "/" .. (v.sub_job or "---") .. (v.sub_job_lvl or "")
+            line = line..","..('%.4u-%.2u-%.2u'):format(date.year, date.month, date.day)
+            line = line..","..('%s,UTC%s'):format(time_c, os.date("%z"))
+            line = line .. "," .. v.zone
+            line = line.."\n"
+            report = report .. line
+            windower.add_to_chat(211,line)
         end
     end
-
-    for k,v in pairs(report:split("\n")) do
-        if (v ~= nil and type(v) ~= "number" and #v>1) then
-            windower.add_to_chat(207, v)
-        end
+    if (csv) then
+        file:append(report)
+        windower.add_to_chat(207, "Attendance saved as: "..filename)
     end
 end
 
@@ -152,10 +135,10 @@ windower.register_event('addon command', function(...)
     local argc = #args
 
     if (cmd == "report") then
-        show_report()
+        show_report(false)
         return
     elseif (cmd == "csv" or cmd == "now") then
-        save_report_csv()
+        show_report(true)
         return
     elseif(T{"ignore","ign","ig"}:contains(cmd)) then
         local member = title_case(args:concat(" "))
