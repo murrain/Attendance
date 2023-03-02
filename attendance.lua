@@ -8,7 +8,6 @@ require('xml')
 res = require('resources')
 files = require('files')
 packets = require('packets')
-res_jobs = require('resources').jobs
 config = require('config')
 
 local is_ready = false
