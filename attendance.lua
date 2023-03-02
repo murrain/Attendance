@@ -4,7 +4,6 @@ _addon.version = '0.0.1'
 _addon.commands = {'attendance', 'att'}
 
 require('logger')
-require('xml')
 res = require('resources')
 files = require('files')
 packets = require('packets')
