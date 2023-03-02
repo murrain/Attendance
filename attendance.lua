@@ -74,16 +74,8 @@ function show_report(csv)
     local timestamp = ('%.4u.%.2u.%.2u.%.2u'):format(date.year, date.month, date.day, time)
     local report = ""
 
-    if (csv) then
-        filename = 'attendance'..('_%.4u.%.2u.%.2u_%.2u.csv'):format(date.year, date.month, date.day, time)
-        file = files.new('/export/'..filename)
-        if not file:exists() then
-            file:create()
-        end
-    end
-
     local current_members = get_player_data()
-    local lines = 0
+
     for k,v in pairs(current_members) do
         if (not ignore_members:contains(v.name)) then
             local line = ""
@@ -97,7 +89,13 @@ function show_report(csv)
             windower.add_to_chat(211,line)
         end
     end
+    
     if (csv) then
+        filename = 'attendance'..('_%.4u.%.2u.%.2u_%.2u.csv'):format(date.year, date.month, date.day, time)
+        file = files.new('/export/'..filename)
+        if not file:exists() then
+            file:create()
+        end
         file:append(report)
         windower.add_to_chat(207, "Attendance saved as: "..filename)
     end
