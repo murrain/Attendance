@@ -44,7 +44,7 @@ function get_player_data()
 
     for k, v in pairs (party) do
         if (type(v) == "table") then
-            if (v.mob and not v.is_npc) then
+            if (v.mob) then
                 id = v.mob.id
                 current_members[id] = {name = v.name, zone = res.zones[v.zone].name}
                 if (known_players[id]) then
@@ -53,7 +53,7 @@ function get_player_data()
                     current_members[id].sub_job = res.jobs[known_players[id].sub_job].ens
                     current_members[id].sub_job_lvl = known_players[id].sub_job_lvl
                 end
-            elseif (not v.is_npc) then
+            else
                 current_members[v.name] = {name = v.name, zone = res.zones[v.zone].name}
             end
         end
@@ -80,8 +80,7 @@ function show_report(csv)
         if (not ignore_members:contains(v.name)) then
             local line = ""
             line = line..v.name
-            line = line .. "," .. (v.main_job or "---") .. (v.main_job_lvl or "") .. "/" .. (v.sub_job or "---") .. (v.sub_job_lvl or "")
-            line = line..","..('%.4u-%.2u-%.2u'):format(date.year, date.month, date.day)
+            line = line .. "," .. ((v.main_job == nil or v.main_job == 'NON') and '---' or v.main_job) .. ((v.main_job_lvl ~= nil and v.main_job_lvl ~= 0) and v.main_job_lvl or "") .. "/" .. ((v.sub_job == nil or v.sub_job == 'NON') and '---' or v.sub_job) .. ((v.sub_job_lvl ~= nil and v.sub_job_lvl ~= 0) and v.sub_job_lvl or "")
             line = line..","..('%s,UTC%s'):format(time_c, os.date("%z"))
             line = line .. "," .. v.zone
             line = line.."\n"
@@ -89,7 +88,7 @@ function show_report(csv)
             windower.add_to_chat(211,line)
         end
     end
-    
+
     if (csv) then
         filename = 'attendance'..('_%.4u.%.2u.%.2u_%.2u.csv'):format(date.year, date.month, date.day, time)
         file = files.new('/export/'..filename)
