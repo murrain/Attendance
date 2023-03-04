@@ -78,9 +78,14 @@ function show_report(csv)
 
     for k,v in pairs(current_members) do
         if (not ignore_members:contains(v.name)) then
+            local main_job = ((v.main_job == nil or v.main_job == 'NON') and '---' or v.main_job)
+            local main_job_lvl = ((v.main_job_lvl ~= nil and v.main_job_lvl ~= 0) and v.main_job_lvl or "")
+            local sub_job = ((v.sub_job == nil or v.sub_job == 'NON') and '---' or v.sub_job)
+            local sub_job_lvl = ((v.sub_job_lvl ~= nil and v.sub_job_lvl ~= 0) and v.sub_job_lvl or "")
+            
             local line = ""
             line = line..v.name
-            line = line .. "," .. ((v.main_job == nil or v.main_job == 'NON') and '---' or v.main_job) .. ((v.main_job_lvl ~= nil and v.main_job_lvl ~= 0) and v.main_job_lvl or "") .. "/" .. ((v.sub_job == nil or v.sub_job == 'NON') and '---' or v.sub_job) .. ((v.sub_job_lvl ~= nil and v.sub_job_lvl ~= 0) and v.sub_job_lvl or "")
+            line = line .. "," .. main_job .. main_job_lvl .. "/" .. sub_job .. sub_job_lvl 
             line = line..","..('%s,UTC%s'):format(time_c, os.date("%z"))
             line = line .. "," .. v.zone
             line = line.."\n"
