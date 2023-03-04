@@ -1,6 +1,8 @@
+--forked from https://github.com/ekrividus/Attendance
+--output inspired by https://github.com/Hatberg/ashitav4-attendance
 _addon.name = 'attendance'
 _addon.author = 'ainais'
-_addon.version = '0.0.1'
+_addon.version = '0.0.2'
 _addon.commands = {'attendance', 'att'}
 
 require('logger')
@@ -78,11 +80,14 @@ function show_report(csv)
 
     for k,v in pairs(current_members) do
         if (not ignore_members:contains(v.name)) then
+            --the game sends a player's main/sub as NON0/NON0 if they are /anon
+            --main_job will be JOB or '---'' if the job string is nil or 'NON'
+            --same logic for sub_job
             local main_job = ((v.main_job == nil or v.main_job == 'NON') and '---' or v.main_job)
             local main_job_lvl = ((v.main_job_lvl ~= nil and v.main_job_lvl ~= 0) and v.main_job_lvl or "")
             local sub_job = ((v.sub_job == nil or v.sub_job == 'NON') and '---' or v.sub_job)
             local sub_job_lvl = ((v.sub_job_lvl ~= nil and v.sub_job_lvl ~= 0) and v.sub_job_lvl or "")
-            
+
             local line = ""
             line = line..v.name
             line = line .. "," .. main_job .. main_job_lvl .. "/" .. sub_job .. sub_job_lvl 
